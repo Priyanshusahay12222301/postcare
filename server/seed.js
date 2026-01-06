@@ -7,7 +7,7 @@ const Coupon = require('./models/Coupon');
 
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/postcare-plus';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/postcare-plus';
 
 // Sample Products
 const products = [
@@ -18,7 +18,7 @@ const products = [
     price: 999,
     brand: 'Apple',
     description: 'The latest iPhone with A17 Pro chip, titanium design, and advanced camera system.',
-    imageUrl: 'https://via.placeholder.com/300/0000FF/FFFFFF?text=iPhone+15+Pro',
+    imageUrl: 'https://placehold.co/300x300/3b82f6/ffffff?text=iPhone+15+Pro',
     features: ['A17 Pro chip', '48MP camera', 'Titanium design', '5G connectivity'],
     inStock: true
   },
@@ -29,30 +29,8 @@ const products = [
     price: 1999,
     brand: 'Apple',
     description: 'Powerful laptop with M3 chip, stunning Liquid Retina XDR display.',
-    imageUrl: 'https://via.placeholder.com/300/0000FF/FFFFFF?text=MacBook+Pro',
+    imageUrl: 'https://placehold.co/300x300/3b82f6/ffffff?text=MacBook+Pro',
     features: ['M3 chip', '14" Retina display', '18-hour battery', '16GB RAM'],
-    inStock: true
-  },
-  {
-    name: 'Samsung Galaxy S24',
-    category: 'Electronics',
-    subcategory: 'Smartphone',
-    price: 899,
-    brand: 'Samsung',
-    description: 'Flagship Android phone with AI features and incredible camera.',
-    imageUrl: 'https://via.placeholder.com/300/000000/FFFFFF?text=Galaxy+S24',
-    features: ['Snapdragon 8 Gen 3', 'AI features', '50MP camera', 'S Pen support'],
-    inStock: true
-  },
-  {
-    name: 'Sony WH-1000XM5',
-    category: 'Electronics',
-    subcategory: 'Headphones',
-    price: 399,
-    brand: 'Sony',
-    description: 'Industry-leading noise cancelling headphones with premium sound.',
-    imageUrl: 'https://via.placeholder.com/300/333333/FFFFFF?text=Sony+WH-1000XM5',
-    features: ['Active noise cancelling', '30-hour battery', 'Premium sound', 'Comfortable design'],
     inStock: true
   },
   {
@@ -62,7 +40,7 @@ const products = [
     price: 1099,
     brand: 'Apple',
     description: 'The ultimate iPad experience with M2 chip and ProMotion display.',
-    imageUrl: 'https://via.placeholder.com/300/0000FF/FFFFFF?text=iPad+Pro',
+    imageUrl: 'https://placehold.co/300x300/3b82f6/ffffff?text=iPad+Pro',
     features: ['M2 chip', '12.9" Liquid Retina', 'Apple Pencil support', '5G'],
     inStock: true
   }
@@ -78,7 +56,7 @@ const suggestions = [
     subcategory: 'Smartphone',
     price: 199,
     description: 'Complete protection for your iPhone including accidental damage coverage.',
-    imageUrl: 'https://via.placeholder.com/200/0000FF/FFFFFF?text=AppleCare',
+    imageUrl: 'https://placehold.co/200x200/3b82f6/ffffff?text=AppleCare',
     benefits: [
       'Accidental damage coverage',
       'Express replacement service',
@@ -88,13 +66,14 @@ const suggestions = [
     priority: 10
   },
   {
-    name: 'Premium Phone Case',
+    name: 'Premium Phone Case + Screen Protector',
     type: 'Accessory',
     category: 'Electronics',
     subcategory: 'Smartphone',
-    price: 49,
-    description: 'Military-grade drop protection with sleek design.',
-    imageUrl: 'https://via.placeholder.com/200/FF0000/FFFFFF?text=Phone+Case',
+    price: 34.99,
+    originalPrice: 49.99,
+    description: 'All-in-one protection with military-grade case and tempered glass screen protector.',
+    imageUrl: 'https://placehold.co/200x200/ef4444/ffffff?text=Phone+Case',
     benefits: [
       '10ft drop protection',
       'Scratch resistant',
@@ -104,29 +83,13 @@ const suggestions = [
     priority: 9
   },
   {
-    name: 'Tempered Glass Screen Protector',
+    name: 'Fast Charging Kit',
     type: 'Accessory',
     category: 'Electronics',
     subcategory: 'Smartphone',
-    price: 29,
-    description: '9H hardness glass to protect your screen from scratches and cracks.',
-    imageUrl: 'https://via.placeholder.com/200/00FF00/FFFFFF?text=Screen+Protector',
-    benefits: [
-      '9H hardness',
-      'Crystal clear',
-      'Easy installation',
-      'Anti-fingerprint coating'
-    ],
-    priority: 8
-  },
-  {
-    name: 'Fast Charger (20W)',
-    type: 'Accessory',
-    category: 'Electronics',
-    subcategory: 'Smartphone',
-    price: 39,
-    description: 'Apple-certified fast charger for optimal charging speed and battery health.',
-    imageUrl: 'https://via.placeholder.com/200/FFFF00/000000?text=Fast+Charger',
+    price: 29.99,
+    description: 'ONLY fast charging - Complete fast charging kit with 20W adapter and cable.',
+    imageUrl: 'https://placehold.co/200x200/fbbf24/000000?text=Fast+Charger',
     benefits: [
       'Apple MFi certified',
       '20W fast charging',
@@ -136,13 +99,30 @@ const suggestions = [
     priority: 7
   },
   {
+    name: 'iCloud+ Storage Plan (200GB)',
+    type: 'Subscription',
+    category: 'Electronics',
+    subcategory: 'Smartphone',
+    price: 2.99,
+    priceType: '/month',
+    description: 'ONLY cloud storage - Monthly cloud storage for photos, videos, and automatic backups.',
+    imageUrl: 'https://placehold.co/200x200/06b6d4/ffffff?text=iCloud',
+    benefits: [
+      'Automatic photo backup',
+      'Device backup protection',
+      'Family sharing',
+      'Cancel anytime'
+    ],
+    priority: 4
+  },
+  {
     name: 'AirPods Pro (2nd gen)',
     type: 'Accessory',
     category: 'Electronics',
     subcategory: 'Smartphone',
     price: 249,
     description: 'Premium wireless earbuds with active noise cancellation.',
-    imageUrl: 'https://via.placeholder.com/200/0000FF/FFFFFF?text=AirPods+Pro',
+    imageUrl: 'https://placehold.co/200x200/3b82f6/ffffff?text=AirPods+Pro',
     benefits: [
       'Active noise cancellation',
       'Spatial audio',
@@ -158,7 +138,7 @@ const suggestions = [
     subcategory: 'Smartphone',
     price: 2.99,
     description: 'Monthly cloud storage for photos, videos, and automatic backups.',
-    imageUrl: 'https://via.placeholder.com/200/00FFFF/000000?text=iCloud',
+    imageUrl: 'https://placehold.co/200x200/06b6d4/ffffff?text=iCloud',
     benefits: [
       'Automatic photo backup',
       'Device backup protection',
@@ -175,7 +155,7 @@ const suggestions = [
     subcategory: 'Laptop',
     price: 379,
     description: 'Extended warranty and accidental damage protection for your MacBook.',
-    imageUrl: 'https://via.placeholder.com/200/0000FF/FFFFFF?text=AppleCare+Mac',
+    imageUrl: 'https://placehold.co/200x200/3b82f6/ffffff?text=AppleCare+Mac',
     benefits: [
       '3 years of protection',
       'Accidental damage coverage',
@@ -191,7 +171,7 @@ const suggestions = [
     subcategory: 'Laptop',
     price: 59,
     description: 'Premium padded sleeve to protect your MacBook from scratches and bumps.',
-    imageUrl: 'https://via.placeholder.com/200/8B4513/FFFFFF?text=Laptop+Sleeve',
+    imageUrl: 'https://placehold.co/200x200/8b4513/ffffff?text=Laptop+Sleeve',
     benefits: [
       'Shock absorption',
       'Water resistant',

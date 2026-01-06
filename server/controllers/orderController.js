@@ -4,16 +4,20 @@ const Product = require('../models/Product');
 // Create new order
 exports.createOrder = async (req, res) => {
   try {
+    console.log('Received order request:', req.body);
     const { productId, quantity, customerInfo } = req.body;
 
     // Fetch product details
     const product = await Product.findById(productId);
     if (!product) {
+      console.log('Product not found:', productId);
       return res.status(404).json({
         success: false,
         message: 'Product not found'
       });
     }
+
+    console.log('Found product:', product.name);
 
     // Calculate total amount
     const totalAmount = product.price * quantity;
@@ -37,6 +41,8 @@ exports.createOrder = async (req, res) => {
       orderStatus: 'Processing'
     });
 
+    console.log('Order created:', order.orderId);
+
     // Populate product details
     await order.populate('product');
 
@@ -46,6 +52,7 @@ exports.createOrder = async (req, res) => {
       data: order
     });
   } catch (error) {
+    console.error('Order creation error:', error);
     res.status(400).json({
       success: false,
       message: 'Error creating order',

@@ -1,7 +1,35 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { createOrder } from '../services/api';
 
 const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
+
+  const handleOrder = async () => {
+    try {
+      // Create order with dummy customer info
+      const orderData = {
+        productId: product._id,
+        quantity: 1,
+        customerInfo: {
+          name: 'Guest User',
+          email: 'guest@postcare.com',
+          phone: '0000000000',
+          address: 'Guest Address'
+        }
+      };
+
+      const response = await createOrder(orderData);
+      const orderId = response.data.data.orderId;
+      
+      // Navigate to thank you page
+      navigate(`/thank-you/${orderId}`);
+    } catch (error) {
+      console.error('Order creation failed:', error);
+      alert('Failed to create order. Please try again.');
+    }
+  };
+
   return (
     <div className="card hover:shadow-xl transition-shadow duration-300">
       <div className="aspect-w-16 aspect-h-9 mb-4">
@@ -33,12 +61,12 @@ const ProductCard = ({ product }) => {
             ${product.price.toLocaleString()}
           </span>
           
-          <Link 
-            to={`/product/${product._id}`}
+          <button 
+            onClick={handleOrder}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
           >
-            View Details
-          </Link>
+            Order Now
+          </button>
         </div>
       </div>
     </div>
