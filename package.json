@@ -1,0 +1,28 @@
+{
+  "name": "postcare-plus",
+  "version": "1.0.0",
+  "description": "Trust-First, Context-Aware Post-Purchase Monetisation Experience",
+  "main": "server/index.js",
+  "scripts": {
+    "server": "nodemon server/index.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd client && npm install",
+    "build": "cd client && npm run build",
+    "seed": "node server/seed.js"
+  },
+  "keywords": ["ecommerce", "post-purchase", "monetization", "trust"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.6.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "body-parser": "^1.20.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "concurrently": "^8.2.1"
+  }
+}
